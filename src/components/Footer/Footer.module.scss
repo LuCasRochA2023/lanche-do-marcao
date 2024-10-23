@@ -1,0 +1,32 @@
+
+.footer {
+    border: 2px solid gray;
+    padding: 20px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+.container__redes__span {
+    display: flex;
+    justify-content: center;
+}
+.container_m:first-child {
+    display: flex;
+    
+    justify-content: center;
+}
+.icon {
+    margin-left: 100px;
+    
+}
+.container__redes li {
+    padding: 6px;
+}
+.container__redes {
+    display: flex;
+    margin-top: 80px;
+}
+.container_m{
+    display: flex;
+    flex-direction: column;
+}

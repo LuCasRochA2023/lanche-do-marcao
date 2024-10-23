@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.titulo {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1e1e;
+}
+.segundo__container{
+    display: flex;
+    
+    justify-content: center;
+    h2{
+        color: #5a5a5a;
+        padding-top: 12px;
+    }
+}
