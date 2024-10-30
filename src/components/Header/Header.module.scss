@@ -1,19 +1,37 @@
 .container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    width: 98vw;
+    padding-right: 40px;
+    height: 8vh;
+    
+}
+header{
+    margin-bottom: 0;
 }
 .titulo {
     font-size: 46px;
     font-weight: 900;
     color: #1e1e1e;
+    justify-content: center;
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.icons a {
+    text-decoration: none;
+    color: inherit;
 }
 .segundo__container{
     display: flex;
-    
+    padding-left: 80px;
     justify-content: center;
     h2{
         color: #5a5a5a;
-        padding-top: 12px;
     }
+}
+.firist_icon {
+    padding-top: 10;
 }

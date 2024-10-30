@@ -2,9 +2,8 @@ import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import { FaShoppingCart } from "react-icons/fa";
 import styles from "./Cards.module.scss";
-import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-function Cards() {
+function Cards({nome, descricao, valor, id, foto}) {
   return (
     <Row xs={1} md={12} className="g-4">
     <CardGroup className={styles.card_group}>
@@ -15,7 +14,7 @@ function Cards() {
           <Card.Text>
             Pão,batata palha, calabresa,bacon,alface e ovo.
           </Card.Text>
- di       </Card.Body>
+          </Card.Body>
         <Card.Footer className={styles.card_footer}>
           <small className="text-muted">R$ 24,99</small>
           <FaShoppingCart/>
