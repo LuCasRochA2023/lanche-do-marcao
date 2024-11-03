@@ -12,14 +12,14 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 const esquemaCadastroUsuario = z.object({
     nome: z.string().min(5, "O nome deve ter no mínimo 5 caracteres"),
     email: z.string().min(1, "O campo é obrigatório!").email("O email não é válido"),
     senha: z.string().min(6, "A senha deve ter ao menos 6 caracteres"),
     cep: z.string().length(8, "Informe um CEP válido"),
     rua: z.string().min(1, "Informe uma rua válida!"),
-    numero: z.coerce.number().min(1, "Informe um número válido"), // Altere para z.number()
+    numero: z.coerce.number().min(1, "Informe um número válido"), 
     bairro: z.string().min(1, "Informe um bairro válido!"),
     localidade: z.string().min(1, "Informe uma localidade válida"),
     senhaVerificada: z.string().min(1, "Este campo não pode ser vazio"),
@@ -29,6 +29,7 @@ const esquemaCadastroUsuario = z.object({
 });
 
 const Cadastro = () => {
+
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const { register, setError, setValue, handleSubmit, watch, formState: { errors } } = useForm({
@@ -77,40 +78,63 @@ const Cadastro = () => {
             endereco: {
                 cep: data.cep,
                 rua: data.rua,
-                numero: String(data.numero), // Mantendo como string para o JSON
+                numero: String(data.numero), 
                 bairro: data.bairro,
                 complemento: data.localidade,
             }
         };
+        const token = localStorage.getItem("TOKEN_KEY"); 
         try {
             const response = await fetch('http://localhost:8080/usuarios', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Corrigido para 'Content-Type'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(usuarioData),
             });
             if (response.ok) {
                 setMessage('Usuário cadastrado com sucesso!');
-                navigate('/login');
+                Swal.fire({
+                    icon: 'success',  
+                    title: 'Sucesso!',
+                    text: 'Usuário cadastrado com sucesso!',
+                    confirmButtonText: 'Ir para login'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/login');
+                    }
+                });
             } else {
                 const errorData = await response.json();
-                setMessage(`Erro: ${errorData.message}`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: `Erro: ${errorData.message}`,
+                });
             }
         } catch (error) {
             console.error("Erro ao cadastrar usuário:", error);
             setMessage("Erro ao cadastrar usuário. Tente novamente mais tarde.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro de Conexão',
+                text: 'Não foi possível conectar ao servidor. Tente novamente mais tarde.',
+            });
         }
         console.log("Formulário submetido");
         console.log("Dados submetidos:", data);
     };
-
+    
     return (
         <PaginaBase>
             <div className={styles.conteudo}>
                 <h1 className={styles.titulo}>Cadastro</h1>
-                {message && <div className={styles.message}>{message}</div>} {/* Mensagem de sucesso ou erro */}
-                <form className={styles.form} onSubmit={handleSubmit(aoSubmeter)}>
+                {message && <div className={styles.message}>{message}</div>} 
+
+                <form className={styles.form} onSubmit={handleSubmit(aoSubmeter      
+
+                )}>
                     <Container>
                         <Row>
                             <Col>
@@ -168,7 +192,7 @@ const Cadastro = () => {
                                     type="text"
                                     {...register("cep", { required: "O campo é obrigatório" })}
                                     $error={errors.cep}
-                                    onBlur={() => fetchEndereco(watch("cep"))} // Chama fetchEndereco com o valor atual
+                                    onBlur={() => fetchEndereco(watch("cep"))}   
                                 />
                                 {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
                             </Col>
@@ -226,8 +250,8 @@ const Cadastro = () => {
                         <div className={styles.div_botao}>
                             <BotaoForm type="submit" texto="Cadastrar" />
                         </div>
-                    </Container>
-                </form>
+                   </Container>
+            </form>
             </div>
         </PaginaBase>
     );
