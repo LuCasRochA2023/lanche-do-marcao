@@ -4,7 +4,13 @@ import PaginaBase from '../PaginaBase';
 import { Input } from '../../components/Input';
 import { Label } from '../../components/Label';
 import { BotaoForm } from '../../components/BotaoForm';
+import { useState } from 'react';
 const Login = () => {
+    const [user, setUser] = useState('');
+    const [senha, setSenha] = useState('');
+    function logar(user, senha) {
+      
+    }
     return (
         <PaginaBase>
             <div className={styles.conteudo}>
@@ -13,15 +19,16 @@ const Login = () => {
                 </h1>
                 <form className={styles.form}>
                     <Label texto="Usuario"/>
-                        <Input />
-                
+                        <Input type="text" valor={(user)} onChange={(e) => setUser(e.target.value)}/>
+
                     <Label texto="Senha"/>
-                        <Input />
+                        <Input type="password"
+                        valor={(senha)} onChange={(e) => setSenha(e.target.value)}/>
                 <div className={styles.div_botao}>
 
                
                     <Link to={'/'}>
-                        <BotaoForm texto="Entrar"/>
+                        <BotaoForm onCLick={logar()} texto="Entrar"/>
                     </Link>
                 </div>
                 </form>   

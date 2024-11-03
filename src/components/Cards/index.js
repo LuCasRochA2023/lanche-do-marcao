@@ -12,12 +12,12 @@ function Cards({nome, descricao, valor, id, foto}) {
         <Card.Body className={styles.corpo}>
           <Card.Title>Opala 6 Cilindros</Card.Title>
           <Card.Text>
-            Pão,batata palha, calabresa,bacon,alface e ovo.
+            Pão, batata palha, calabresa, bacon, alface e ovo.
           </Card.Text>
           </Card.Body>
         <Card.Footer className={styles.card_footer}>
           <small className="text-muted">R$ 24,99</small>
-          <FaShoppingCart/>
+          <FaShoppingCart size={26}/>
         </Card.Footer>
       </Card>
       <Card bg='light'>
@@ -25,13 +25,13 @@ function Cards({nome, descricao, valor, id, foto}) {
         <Card.Body>
           <Card.Title>Chevette turbo</Card.Title>
           <Card.Text>
-          Pão,ervilha,calabresa,bacon,milho e tiras de alcatra.
+          Pão, ervilha, calabresa, bacon, milho e tiras de alcatra.
           </Card.Text>
         </Card.Body>
 
           <Card.Footer className={styles.card_footer}>
           <small className="text-muted">R$ 30,00</small>
-          <FaShoppingCart/>
+          <FaShoppingCart size={26}/>
         </Card.Footer>
         
       </Card>
@@ -40,12 +40,12 @@ function Cards({nome, descricao, valor, id, foto}) {
         <Card.Body>
           <Card.Title>Maverick com coca-cola</Card.Title>
           <Card.Text>
-          Pão, 2ovos, salsicha, 2 hamburgueres, bacon e alface.          </Card.Text>
+          Pão, 2 ovos, salsicha, 2 hamburgueres, bacon e alface.          </Card.Text>
         </Card.Body>
 
           <Card.Footer className={styles.card_footer}>
           <small className="text-muted">R$ 40,00</small>
-          <FaShoppingCart/>
+          <FaShoppingCart size={26}/>
         </Card.Footer>
       </Card>
       <Card bg='light'>
@@ -59,7 +59,7 @@ function Cards({nome, descricao, valor, id, foto}) {
 
           <Card.Footer className={styles.card_footer}>
           <small className="text-muted">R$ 25,00</small>
-          <FaShoppingCart/>
+          <FaShoppingCart size={26}/>
         </Card.Footer>
         </Card>
     </CardGroup>

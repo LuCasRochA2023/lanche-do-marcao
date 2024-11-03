@@ -22,7 +22,9 @@
     "react-scripts": "5.0.1",
     "sass": "^1.80.3",
     "web-vitals": "^2.1.4",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "proxy": "http://localhost:8000"
+
   },
   "scripts": {
     "start": "react-scripts start",

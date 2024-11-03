@@ -1,6 +1,6 @@
 import { z } from "zod";
-import PaginaBase from "../PaginaBase"
-import styles from "./Cadastro.module.scss"
+import PaginaBase from "../PaginaBase";
+import styles from "./Cadastro.module.scss";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../../components/Label";
@@ -10,29 +10,28 @@ import ErrorMessage from "../../components/ErrorMessage";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const esquemaCadastroUsuario = z.object({
     nome: z.string().min(5, "O nome deve ter no mínimo 5 caracteres"),
-    email: z.string().min(1, "O campo é obrigatório!")
-    .email("O email não é válido"),
+    email: z.string().min(1, "O campo é obrigatório!").email("O email não é válido"),
     senha: z.string().min(6, "A senha deve ter ao menos 6 caracteres"),
-     cep: z.string().length(8, "Informe um CEP válido"),
+    cep: z.string().length(8, "Informe um CEP válido"),
     rua: z.string().min(1, "Informe uma rua válida!"),
-    numero: z.coerce.number().min(1, "Informe um número válido"),
+    numero: z.coerce.number().min(1, "Informe um número válido"), // Altere para z.number()
     bairro: z.string().min(1, "Informe um bairro válido!"),
     localidade: z.string().min(1, "Informe uma localidade válida"),
     senhaVerificada: z.string().min(1, "Este campo não pode ser vazio"),
-  })
-  .refine((dados) => dados.senha === dados.senhaVerificada, {
+}).refine((dados) => dados.senha === dados.senhaVerificada, {
     message: "As senhas não coincidem",
     path: ["senhaVerificada"],
-  
-
-})
+});
 
 const Cadastro = () => {
-    const {  register, setError, setValue, handleSubmit,watch, formState: { errors } } = useForm({
+    const navigate = useNavigate();
+    const [message, setMessage] = useState('');
+    const { register, setError, setValue, handleSubmit, watch, formState: { errors } } = useForm({
         mode: "onSubmit",
         resolver: zodResolver(esquemaCadastroUsuario),
         defaultValues: {
@@ -51,10 +50,7 @@ const Cadastro = () => {
     const fetchEndereco = async (cep) => {
         setError("cep", { type: "manual", message: "" });
         if (cep.length !== 8) {
-            setError("cep", {
-                type: "manual",
-                message: "Cep inválido",
-            });
+            setError("cep", { type: "manual", message: "Cep inválido" });
             return;
         }
         try {
@@ -71,146 +67,155 @@ const Cadastro = () => {
             console.error(error);
         }
     };
-    const cepValue = watch("cep")
-    const aoSubmeter = (dados) => {
-        console.log("Formulário submetido");
-        console.log("Dados submetidos:", dados);
-        if (Object.keys(errors).length > 0) {
-            console.log("Erros encontrados:", errors);
-        } else {
-            console.log("Submissão bem-sucedida");
-        }
-    }
 
+    const aoSubmeter = async (data) => {
+        const usuarioData = {
+            nome: data.nome,
+            email: data.email,
+            senha: data.senha,
+            ativo: true,
+            endereco: {
+                cep: data.cep,
+                rua: data.rua,
+                numero: String(data.numero), // Mantendo como string para o JSON
+                bairro: data.bairro,
+                complemento: data.localidade,
+            }
+        };
+        try {
+            const response = await fetch('http://localhost:8080/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Corrigido para 'Content-Type'
+                },
+                body: JSON.stringify(usuarioData),
+            });
+            if (response.ok) {
+                setMessage('Usuário cadastrado com sucesso!');
+                navigate('/login');
+            } else {
+                const errorData = await response.json();
+                setMessage(`Erro: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar usuário:", error);
+            setMessage("Erro ao cadastrar usuário. Tente novamente mais tarde.");
+        }
+        console.log("Formulário submetido");
+        console.log("Dados submetidos:", data);
+    };
 
     return (
-        
         <PaginaBase>
-          
             <div className={styles.conteudo}>
-            <h1  className={styles.titulo}>
-                    Cadastro
-                </h1>
+                <h1 className={styles.titulo}>Cadastro</h1>
+                {message && <div className={styles.message}>{message}</div>} {/* Mensagem de sucesso ou erro */}
                 <form className={styles.form} onSubmit={handleSubmit(aoSubmeter)}>
                     <Container>
-
-                    
-                    <Row >
-
-                        <Col>
-                        
-                        
-                        <Label htmlFor="campo-nome" texto="Nome" />
-                        <Input placeholder="Digete seu nome completo"
-                            id="campo-nome"
-                            type="text"
-                            $error={errors.nome}
-                            {...register("nome")}
-                        />
-                        {errors.nome && <ErrorMessage >{errors.nome.message}</ErrorMessage>}
-                        
-                        </Col>
-                        <Col>
-                        <Label htmlFor="campo-email" texto="Email" />
-                        <Input placeholder="Digite seu Email"
-                            type="email"
-                            id="campo-email"
-                            $error={errors.email}
-                            {...register("email")}
-                        />
-                        </Col>
-                        </Row>
-                        {errors.email && <ErrorMessage >{errors.email.message}</ErrorMessage>}
                         <Row>
-                        <Col>
-                        <Label htmlFor="campo-senha" texto="Senha" />
-                        <Input placeholder="Digite sua senha"
-                            type="password"
-                            id="campo-senha"
-                            $error={errors.senha}
-                            {...register("senha")}
-                        />
-
-                        {errors.senha && <ErrorMessage >{errors.senha.message}</ErrorMessage>}
-                        </Col> 
-                        <Col>
-                        <Label htmlFor="campo-senha-confirmacao" texto="Confirme a senha"/>
-                        <Input
-                            id="campo-senha-confirmacao"
-                            placeholder="Repita a senha anterior"
-                            type="password"
-                            $error={!!errors.senhaVerificada}
-                            {...register("senhaVerificada")}
-                        />
-                        {errors.senhaVerificada && (
-                            <ErrorMessage>{errors.senhaVerificada.message}</ErrorMessage>
-                        )}
-                        </Col>
+                            <Col>
+                                <Label htmlFor="campo-nome" texto="Nome" />
+                                <Input placeholder="Digite seu nome completo"
+                                    id="campo-nome"
+                                    type="text"
+                                    $error={errors.nome}
+                                    {...register("nome")}
+                                />
+                                {errors.nome && <ErrorMessage>{errors.nome.message}</ErrorMessage>}
+                            </Col>
+                            <Col>
+                                <Label htmlFor="campo-email" texto="Email" />
+                                <Input placeholder="Digite seu Email"
+                                    type="email"
+                                    id="campo-email"
+                                    $error={errors.email}
+                                    {...register("email")}
+                                />
+                            </Col>
                         </Row>
+                        {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
                         <Row>
-                        <Col>
-                        <Label htmlFor="campo-cep" texto="Cep"/>
-                        <Input
-                            id="campo-cep"
-                            placeholder="Insira seu CEP"
-                            type="text"
-                            {...register("cep", { required: "O campo é obrigatório" })}
-                            $error={errors.cep}
-                            onBlur={() => {
-                            
-                                fetchEndereco(cepValue);
-                                }}
-                        />
-                        {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
-                    
-                        </Col>
-                        <Col>  
-                        <Label htmlFor="campo-rua" texto="Rua"/>
-                        <Input
-                            id="campo-rua"
-                            placeholder="Rua Agarikov"
-                            type="text"
-                            $error={!!errors.rua}
-                            {...register("rua", { required: "O campo é obrigatório" })}
-                        />
-                        {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
-                    
-
-                        </Col>     
+                            <Col>
+                                <Label htmlFor="campo-senha" texto="Senha" />
+                                <Input placeholder="Digite sua senha"
+                                    type="password"
+                                    id="campo-senha"
+                                    $error={errors.senha}
+                                    {...register("senha")}
+                                />
+                                {errors.senha && <ErrorMessage>{errors.senha.message}</ErrorMessage>}
+                            </Col>
+                            <Col>
+                                <Label htmlFor="campo-senha-confirmacao" texto="Confirme a senha" />
+                                <Input
+                                    id="campo-senha-confirmacao"
+                                    placeholder="Repita a senha anterior"
+                                    type="password"
+                                    $error={!!errors.senhaVerificada}
+                                    {...register("senhaVerificada")}
+                                />
+                                {errors.senhaVerificada && (
+                                    <ErrorMessage>{errors.senhaVerificada.message}</ErrorMessage>
+                                )}
+                            </Col>
                         </Row>
                         <Row>
                             <Col>
-                            <Label htmlFor="campo-numero-rua" texto="Número"/>
-                            <Input
-                                id="campo-numero-rua"
-                                placeholder="Ex: 1440"
-                                type="text"
-                                $error={!!errors.numero}
-                                {...register("numero", { required: "O campo é obrigatório" })}
-                            />
-                            {errors.numero && (
-                                <ErrorMessage>{errors.numero.message}</ErrorMessage>
-                            )}
+                                <Label htmlFor="campo-cep" texto="Cep" />
+                                <Input
+                                    id="campo-cep"
+                                    placeholder="Insira seu CEP"
+                                    type="text"
+                                    {...register("cep", { required: "O campo é obrigatório" })}
+                                    $error={errors.cep}
+                                    onBlur={() => fetchEndereco(watch("cep"))} // Chama fetchEndereco com o valor atual
+                                />
+                                {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
                             </Col>
                             <Col>
-                            <Label htmlFor="campo-bairro" texto="Bairro"/>
-                            <Input
-                                id="campo-bairro"
-                                placeholder="Vila Mariana"
-                                type="text"
-                                $error={!!errors.bairro}
-                                {...register("bairro", { required: "O campo é obrigatório" })}
-                            />
-                            {errors.bairro && (
-                                <ErrorMessage>{errors.bairro.message}</ErrorMessage>
-                            )}
+                                <Label htmlFor="campo-rua" texto="Rua" />
+                                <Input
+                                    id="campo-rua"
+                                    placeholder="Rua Agarikov"
+                                    type="text"
+                                    $error={!!errors.rua}
+                                    {...register("rua", { required: "O campo é obrigatório" })}
+                                />
+                                {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
                             </Col>
                         </Row>
-                    
-                        <Label htmlFor="campo-localidade" texto="Complemento"/>
+                        <Row>
+                            <Col>
+                                <Label htmlFor="campo-numero-rua" texto="Número" />
+                                <Input
+                                    id="campo-numero-rua"
+                                    placeholder="Ex: 1440"
+                                    type="text"
+                                    $error={!!errors.numero}
+                                    {...register("numero", { required: "O campo é obrigatório" })}
+                                />
+                                {errors.numero && (
+                                    <ErrorMessage>{errors.numero.message}</ErrorMessage>
+                                )}
+                            </Col>
+                            <Col>
+                                <Label htmlFor="campo-bairro" texto="Bairro" />
+                                <Input
+                                    id="campo-bairro"
+                                    placeholder="Vila Mariana"
+                                    type="text"
+                                    $error={!!errors.bairro}
+                                    {...register("bairro", { required: "O campo é obrigatório" })}
+                                />
+                                {errors.bairro && (
+                                    <ErrorMessage>{errors.bairro.message}</ErrorMessage>
+                                )}
+                            </Col>
+                        </Row>
+                        <Label htmlFor="campo-localidade" texto="Complemento" />
                         <Input
                             id="campo-localidade"
-                            placeholder="São Paulo, SP"
+                            placeholder="Cidade e Estado"
                             type="text"
                             $error={!!errors.localidade}
                             {...register("localidade", { required: "O campo é obrigatório" })}
@@ -218,15 +223,14 @@ const Cadastro = () => {
                         {errors.localidade && (
                             <ErrorMessage>{errors.localidade.message}</ErrorMessage>
                         )}
-                    <div className={styles.div_botao}>
-                        <BotaoForm type="submit" texto="Cadastrar" />
-                    </div>    
-                </Container>
-            </form>
-           
-        </div>
-       </PaginaBase >
-        )
+                        <div className={styles.div_botao}>
+                            <BotaoForm type="submit" texto="Cadastrar" />
+                        </div>
+                    </Container>
+                </form>
+            </div>
+        </PaginaBase>
+    );
 }
 
 export default Cadastro;

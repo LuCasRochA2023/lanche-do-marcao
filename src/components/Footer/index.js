@@ -4,14 +4,13 @@ import { FaInstagram } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 import { BsTwitterX } from "react-icons/bs";
 import { FaYoutube } from "react-icons/fa";
-import { TbHexagonLetterMFilled } from "react-icons/tb"
-
+import logo from "./logoMarcao.png";
 const Footer = () => {
     return(
         <footer className={styles.footer}>
             
             <div className={styles.container_m}>
-                <TbHexagonLetterMFilled className={styles.icon} size={24}/>
+                <img src={logo} alt="logo marcao" size={24}/>
             
                 
                 <ul className={styles.container__redes__span}>
@@ -56,7 +55,7 @@ const Footer = () => {
                     <span>Frango Assado</span>
                 </li>
                 <li>
-                    <span>Carne artezanal </span>
+                    <span>Carne artesanal </span>
                 </li>
                
             </ul>
