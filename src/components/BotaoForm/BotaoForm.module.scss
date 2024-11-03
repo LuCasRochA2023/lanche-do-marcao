@@ -7,3 +7,8 @@
     font-size: 24px;
     border-radius: 64px;
 }
+@media (min-width: 768px) and (max-width: 1023px)  {
+   .botao{
+    width: 150px;
+   } 
+}

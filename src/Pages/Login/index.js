@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 import PaginaBase from '../PaginaBase';
 import { Input } from '../../components/Input';
@@ -7,12 +7,13 @@ import { BotaoForm } from '../../components/BotaoForm';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 
-const Login = ({ nomeProps }) => {
+const Login = ( ) => {
     const [user, setUser] = useState('');
     const [senha, setSenha] = useState('');
-    const [nome, setNome] = useState(nomeProps);
+    const location = useLocation();
+    const nome = location.state?.nome || "" ;
     const navigate = useNavigate();
-
+    localStorage.setItem("user_nome",nome);
     async function logar(data) {
         data.preventDefault();
     
@@ -27,7 +28,7 @@ const Login = ({ nomeProps }) => {
         }
     
         const dadosLogin = {
-            email: user, // Certifique-se de usar o nome correto esperado pelo backend
+            email: user, 
             senha: senha
         };
     
@@ -43,17 +44,16 @@ const Login = ({ nomeProps }) => {
             if (response.ok) {
                 const { token } = await response.json(); // Obtenha o token da resposta
                 localStorage.setItem("TOKEN_KEY", token); // Armazene o token
-                setNome(user);
                 setUser('');
                 setSenha('');
                 Swal.fire({
                     icon: 'success',
                     title: 'Sucesso!',
-                    text: `Bem-vindo ${user}!`,
+                    text: `Bem-vindo ${nome}!`,
                     confirmButtonText: 'Ir para a página inicial'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate('/');
+                        navigate('/' , {state: { nome }});
                     }
                 });
             } else {

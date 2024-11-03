@@ -9,9 +9,8 @@ import Alert from '@mui/material/Alert';
 import * as React from 'react';
 
 function OffCanvasExample({ name, ...props }) {
-    const [open, setOpen] = React.useState(false);  // Para Snackbar
-    const [show, setShow] = useState(false);  // Para Offcanvas
-
+    const [open, setOpen] = React.useState(false);  
+    const [show, setShow] = useState(false);  
     const handleSnackbarOpen = () => {
         setOpen(true);
     };

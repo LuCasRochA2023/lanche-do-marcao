@@ -102,7 +102,7 @@ const Cadastro = () => {
                     confirmButtonText: 'Ir para login'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate('/login');
+                        navigate('/login' , {state: {nome: data.nome}});
                     }
                 });
             } else {

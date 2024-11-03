@@ -4,24 +4,43 @@ import styles from "./Header.module.scss"
 import { Link } from "react-router-dom";
 import  logo from "./logoMarcao.png"
 import OffCanvas from "../OffCanvas";
-const Header = () => {
+import { Col, Container, Row } from "react-bootstrap";
+const Header = ({nomeUsuario = ""}) => {
     return (
         <header>
-            <div className={styles.container}>
-                <div className={styles.firist_icon}>
-                    <img src={logo} alt="logo marcao"/>
-                </div>
-          
-                <h1 className={styles.titulo}>Lanche do Marcão</h1>
-                <div className={styles.icons}>
-                    
-                    <Link to={'/login'}>
-                        <RxAvatar size={36}  />
-                    </Link>
-                     <OffCanvas/> 
-               
-                </div>
+            
                 
+                
+                <div className={styles.container}>
+                <Container>
+                <Row >
+                    <Col md={3 } sm={3} xl={4} xxl={4} >
+                        <div className={styles.firist_icon}>
+                            <img src={logo} alt="logo marcao"/>
+                        </div>
+                    </Col>
+                    <Col md={4} sm={4} xl={3}>
+                        <h1 className={styles.titulo}>Lanche do Marcão</h1>
+                    </Col>
+                    <Col md={3} sm={2}xl={2 } xxl={3}>
+                
+                        <h2>{nomeUsuario}</h2>
+                    </Col>
+                    <Col sm={1} md={1} xl={1}  xxl={1} >
+                    <Link to={'/login'}>
+                        <RxAvatar className={styles.decoration} size={36}  />
+                    </Link>
+                    </Col>
+                   <Col sm={1} md={1} xl={1} xxl={1}>
+                        <OffCanvas/> 
+                    </Col>
+                        
+                     
+                
+               
+                
+                </Row>
+                </Container>
             </div>
 
             <div className={styles.segundo__container}>
