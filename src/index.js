@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Cadastro from './Pages/Cadastro';
 import App from './App';
+import { ProdutoCarrinhoContext } from './context/ProdutoContext';
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
@@ -14,9 +15,11 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    
-      <RouterProvider router={router} />
-    
+      <ProdutoCarrinhoContext>
+
+      
+        <RouterProvider router={router} />
+      </ProdutoCarrinhoContext>
 
   </React.StrictMode>
 );

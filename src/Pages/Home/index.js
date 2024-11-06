@@ -3,6 +3,7 @@ import Cards from '../../components/Cards';
 import Header from '../../components/Header';
 import Footer from "../../components/Footer";
 import { useLocation } from 'react-router-dom';
+import Lanche from '../../components/utils';
 
 function Home() {
   const location = useLocation();
@@ -12,7 +13,7 @@ function Home() {
     <div >
       <Header nomeUsuario={`Bem vindo ${nome}`}/>
       <Banner/>
-      <Cards/>
+      <Lanche/>
       <Footer/>
     </div>
   );
