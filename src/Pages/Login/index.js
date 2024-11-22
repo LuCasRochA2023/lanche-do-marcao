@@ -17,7 +17,6 @@ const Login = ( ) => {
     async function logar(data) {
         data.preventDefault();
     
-        // Verifique se os campos não estão vazios
         if (!user || !senha) {
             Swal.fire({
                 icon: 'warning',
@@ -42,8 +41,8 @@ const Login = ( ) => {
             });
     
             if (response.ok) {
-                const { token } = await response.json(); // Obtenha o token da resposta
-                localStorage.setItem("TOKEN_KEY", token); // Armazene o token
+                const { token } = await response.json(); 
+                localStorage.setItem("TOKEN_KEY", token); 
                 setUser('');
                 setSenha('');
                 Swal.fire({

@@ -13,9 +13,11 @@ function Cards({lanche} ) {
   }
   return (
 
-    <Row xs={1} md={12} className="g-4">
+    <Row xs={1} md={12}  className="g-4">
+      
       <CardGroup className={styles.card_group}>
       {lanche.map((lanches)=> (
+
           <Card key={lanches.id} bg='light'>
           <Card.Img variant="top" src={lanches.imagem} />
           <Card.Body>
@@ -31,9 +33,8 @@ function Cards({lanche} ) {
             <FaShoppingCart style={{cursor:"pointer"}} size={26} onClick={()=> adicionaAoCarrinho(lanches)}/>
           </Card.Footer>
          
-
         </Card>
-        
+
       ))}
     
     </CardGroup>

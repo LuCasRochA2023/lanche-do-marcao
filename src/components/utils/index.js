@@ -5,7 +5,7 @@ const Lanche = () => {
         "id": 1,
         "nome": "Opala 6 Cilindros",
         "preco": 24.99,
-        "descricao": "pão,batata palha, calabresa,bacon,alface,ovo",
+        "descricao": "Pão,batata palha, calabresa,bacon,alface,ovo",
         "imagem": "/assets/image2.jpg"
       },
       {
@@ -27,8 +27,15 @@ const Lanche = () => {
         "nome": "Voyage",
         "preco": 25.00,
         "descricao": "Pão de hot-dog, 2 salsicha, milho, tomate picado, batata palha e maionese",
-        "imagem": "assets/image5.jpg"
-      }
+        "imagem": "/assets/image5.jpg"
+      },
+      {
+        "id": 5,
+        "nome": "Santana Flex",
+        "preco": 14.99,
+        "descricao": "Pão, carne, molho",
+        "imagem": "/assets/santana.jpg"
+      },
     ] 
     return(
         <>
